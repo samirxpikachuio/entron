@@ -1,0 +1,43 @@
+note: Functions and Recursion in plain English
+
+define function greet with name and title
+    define variable message as "Welcome, " joined with title joined with " " joined with name joined with "!"
+    return message
+end function
+
+define variable welcome_text as call greet with "Ada Lovelace" and "Countess"
+display welcome_text
+
+note: Recursive factorial calculation
+define function factorial with n
+    if n is at most 1 then
+        return 1
+    end if
+    define variable prev as n minus 1
+    define variable sub_result as call factorial with prev
+    return n times sub_result
+end function
+
+define variable fact5 as call factorial with 5
+display "Factorial of 5: " joined with fact5
+
+note: Recursive Fibonacci calculation
+define function fibonacci with num
+    if num is at most 0 then
+        return 0
+    end if
+    if num is equal to 1 then
+        return 1
+    end if
+    define variable num1 as num minus 1
+    define variable num2 as num minus 2
+    define variable res1 as call fibonacci with num1
+    define variable res2 as call fibonacci with num2
+    return res1 plus res2
+end function
+
+display "Fibonacci sequence from 1 to 8:"
+count from 1 to 8 as i do
+    define variable fib_val as call fibonacci with i
+    display "fib(" joined with i joined with ") = " joined with fib_val
+end count

@@ -1,0 +1,22 @@
+note: String manipulation and time operations in plain English
+
+define variable sentence as "  Entron makes programming natural and intuitive!  "
+display "Original sentence: '" joined with sentence joined with "'"
+
+define variable cleaned as trimmed sentence
+display "Trimmed sentence: '" joined with cleaned joined with "'"
+
+display "Uppercase: " joined with uppercase of cleaned
+display "Lowercase: " joined with lowercase of cleaned
+
+define variable csv_row as "React,Vue,Svelte,Entron"
+display "Splitting CSV: " joined with csv_row
+define variable frameworks as split csv_row by ","
+display "Resulting list: " joined with frameworks
+
+define variable start_time as current timestamp
+display "Waiting 300 milliseconds..."
+wait 300 milliseconds
+define variable end_time as current timestamp
+define variable elapsed as end_time minus start_time
+display "Elapsed time: " joined with elapsed joined with " ms"

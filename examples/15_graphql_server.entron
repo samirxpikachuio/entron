@@ -1,0 +1,15 @@
+note: Entron Built-In GraphQL Server
+note: Schema, query execution, and resolvers defined in plain English
+
+define variable my_schema as "type Query { message: String, version: String, serverStatus: String }"
+
+define function getSystemStatus
+    return "Operational and Healthy"
+end function
+
+define variable my_resolvers as record with key "message" as "Welcome to Entron GraphQL API" and key "version" as "1.0.0" and key "serverStatus" as getSystemStatus
+
+display "Starting Entron GraphQL API server on port 4001..."
+start graphql server on port 4001 with schema my_schema and resolvers my_resolvers
+display "Entron GraphQL API server is listening at http://localhost:4001/graphql"
+display "Open http://localhost:4001 in your browser for the Interactive Explorer!"

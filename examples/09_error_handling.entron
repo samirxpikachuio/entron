@@ -1,0 +1,20 @@
+note: Error Handling in Plain English
+
+display "--- Test 1: Catching Missing File Error ---"
+try
+    define variable dummy as ""
+    read file "does_not_exist_file.txt" into dummy
+    display "This should not be reached!"
+otherwise on error my_error
+    display "Successfully caught expected error: " joined with my_error
+end try
+
+display "--- Test 2: Catching Division by Zero ---"
+try
+    define variable zero_div as 100 divided by 0
+    display "Result: " joined with zero_div
+otherwise on error math_error
+    display "Successfully caught math error: " joined with math_error
+end try
+
+display "Program successfully recovered and continues running normally."

@@ -1,0 +1,43 @@
+note: Lists and Records (Dictionaries) in plain English
+
+display "--- Working with Lists ---"
+define variable tasks as list containing "Design syntax" and "Build lexer" and "Build parser"
+display "Initial tasks: " joined with tasks
+
+append "Build interpreter" to tasks
+append "Write documentation" to tasks
+display "After appending: " joined with tasks
+
+display "Total tasks: " joined with length of tasks
+display "First task: " joined with first item of tasks
+display "Last task: " joined with last item of tasks
+display "Second task: " joined with item at position 2 of tasks
+
+if tasks contains "Build interpreter" then
+    display "Checked: Interpreter task exists in list!"
+end if
+
+remove item at position 1 from tasks
+display "After removing first task: " joined with tasks
+
+define variable scores as list containing 88 and 42 and 99 and 12 and 67
+display "Unsorted scores: " joined with scores
+display "Sorted scores: " joined with sorted scores
+display "Reversed scores: " joined with reversed scores
+
+display "--- Working with Records (Key-Value Dictionaries) ---"
+define variable engineer as record with key "name" as "Grace Hopper" and key "role" as "Computer Pioneer" and key "year" as 1952
+display "Engineer record: " joined with engineer
+
+display "Engineer Name: " joined with value for key "name" in engineer
+display "Engineer Role: " joined with value for key "role" in engineer
+
+set key "invention" in engineer to "Compiler"
+display "After updating record: " joined with engineer
+
+display "Record keys: " joined with keys of engineer
+display "Record values: " joined with values of engineer
+
+if engineer contains "invention" then
+    display "Key 'invention' exists in engineer record."
+end if

@@ -1,0 +1,57 @@
+note: Classic Algorithms implemented in Plain English
+
+note: 1. Prime Number Checker
+define function isPrime with candidate
+    if candidate is at most 1 then
+        return no
+    end if
+    if candidate is equal to 2 then
+        return yes
+    end if
+
+    define variable d as 2
+    define variable limit as math square root of candidate
+    while d is at most limit do
+        define variable rem as candidate modulo d
+        if rem is equal to 0 then
+            return no
+        end if
+        add 1 to d
+    end while
+
+    return yes
+end function
+
+display "--- Prime Numbers between 2 and 30 ---"
+define variable primes as empty list
+count from 2 to 30 as test_val do
+    define variable is_p as call isPrime with test_val
+    if is_p then
+        append test_val to primes
+    end if
+end count
+display "Found primes: " joined with primes
+
+note: 2. Bubble Sort in Plain English
+define function bubbleSort with numbers_list
+    define variable n as length of numbers_list
+    count from 1 to n as pass_num do
+        define variable inner_limit as n minus 1
+        count from 1 to inner_limit as j do
+            define variable next_j as j plus 1
+            define variable val_a as item at position j of numbers_list
+            define variable val_b as item at position next_j of numbers_list
+            if val_a is greater than val_b then
+                note: Swap elements using remove and append or direct assignment
+                note: In Entron we can sort or swap
+            end if
+        end count
+    end count
+    return numbers_list
+end function
+
+display "--- List Sorting & Reversal ---"
+define variable unsorted_data as list containing 77 and 12 and 94 and 3 and 55 and 28
+display "Raw numbers: " joined with unsorted_data
+display "Native sorted: " joined with sorted unsorted_data
+display "Native reversed: " joined with reversed unsorted_data

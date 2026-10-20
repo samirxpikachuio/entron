@@ -1,0 +1,37 @@
+note: Loops in plain English
+
+display "--- 1. Repeat Loop ---"
+repeat 3 times
+    display "Repeating message..."
+end repeat
+
+display "--- 2. Count From 1 to 5 ---"
+count from 1 to 5 as i do
+    display "Number: " joined with i
+end count
+
+display "--- 3. Count With Step ---"
+count from 10 to 2 by negative 2 as step_num do
+    display "Stepping down: " joined with step_num
+end count
+
+display "--- 4. While Loop with Break ---"
+define variable timer as 1
+while timer is at most 10 do
+    if timer is equal to 4 then
+        display "Breaking early at timer: " joined with timer
+        break loop
+    end if
+    display "Timer tick: " joined with timer
+    add 1 to timer
+end while
+
+display "--- 5. For Each Item In List ---"
+define variable fruits as list containing "Apple" and "Orange" and "Mango" and "Berry"
+for each current_fruit in fruits do
+    if current_fruit is equal to "Orange" then
+        display "Skipping orange with continue!"
+        continue loop
+    end if
+    display "Enjoying fruit: " joined with current_fruit
+end for

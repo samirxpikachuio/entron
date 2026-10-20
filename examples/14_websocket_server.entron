@@ -1,0 +1,17 @@
+note: Entron Built-In WebSocket Server
+note: Real-time, event-driven communication in plain English
+
+define function onClientConnected with client_id
+    display "New WebSocket client connected: " joined with client_id
+    send message "Welcome to Entron Real-Time WebSocket Server!" to socket client_id
+end function
+
+define function onClientMessage with client_id and message_text
+    display "Received message from client " joined with client_id joined with ": " joined with message_text
+    define variable echo_reply as "Entron Echo: " joined with message_text
+    send message echo_reply to socket client_id
+end function
+
+display "Starting Entron WebSocket server on port 8081..."
+start websocket server on port 8081 with on open onClientConnected and on message onClientMessage
+display "WebSocket server is listening on ws://localhost:8081"

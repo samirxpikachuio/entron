@@ -1,0 +1,8 @@
+note: Welcome to Entron!
+note: This program demonstrates basic output and variable manipulation in plain English.
+
+define variable language_name as "Entron"
+define variable creator as "World"
+
+display "Hello, " joined with creator joined with "! Welcome to " joined with language_name joined with "."
+display "In Entron, everything is written in clean, expressive English instead of cryptic symbols."

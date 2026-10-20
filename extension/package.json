@@ -1,0 +1,35 @@
+{
+  "name": "entron-language",
+  "displayName": "Entron Language Support",
+  "description": "Rich syntax highlighting, file icons, and language configuration for the Entron plain-English programming language.",
+  "version": "1.0.0",
+  "publisher": "entron-team",
+  "icon": "assets/entron-icon.svg",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "entron",
+        "aliases": ["Entron", "entron"],
+        "extensions": [".entron", ".ent"],
+        "configuration": "./language-configuration.json",
+        "icon": {
+          "light": "./assets/entron-icon.svg",
+          "dark": "./assets/entron-icon.svg"
+        }
+      }
+    ],
+    "grammars": [
+      {
+        "language": "entron",
+        "scopeName": "source.entron",
+        "path": "./syntaxes/entron.tmLanguage.json"
+      }
+    ]
+  }
+}

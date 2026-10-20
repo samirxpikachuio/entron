@@ -1,0 +1,28 @@
+note: Variables and Arithmetic in plain English
+
+define variable score as 100
+display "Initial score: " joined with score
+
+add 50 to score
+display "After adding 50: " joined with score
+
+subtract 20 from score
+display "After subtracting 20: " joined with score
+
+change score by 10
+display "After changing by 10: " joined with score
+
+define variable calculation as 10 plus 5 times 4 divided by 2
+display "Calculation result: " joined with calculation
+
+define variable root_val as math square root of 144
+display "Square root of 144: " joined with root_val
+
+define variable power_val as math power of 2 to 8
+display "2 to the power of 8: " joined with power_val
+
+define variable absolute_val as math absolute value of negative 42
+display "Absolute value of -42: " joined with absolute_val
+
+define variable lucky_number as random number between 1 and 100
+display "Your lucky random number between 1 and 100 is: " joined with lucky_number

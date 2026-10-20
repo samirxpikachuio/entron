@@ -1,0 +1,21 @@
+note: File I/O operations in plain English
+
+define variable filename as "entron_notes.txt"
+
+display "Writing initial content to file..."
+write "Entron File System Demo" to file filename
+
+display "Appending more lines to file..."
+append "Line 1: Plain English syntax is clear." to file filename
+append "Line 2: Modern dynamic capabilities built-in." to file filename
+
+if file exists filename then
+    display "File exists verification: PASSED"
+end if
+
+display "Reading file content..."
+define variable loaded_content as ""
+read file filename into loaded_content
+
+display "=== Loaded File Content ==="
+display loaded_content

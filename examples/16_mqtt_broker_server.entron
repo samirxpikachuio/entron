@@ -1,0 +1,17 @@
+note: Entron Built-In MQTT Broker Server
+note: IoT / Telemetry message broker with publish and subscribe in plain English
+
+define function onMqttPacket with topic_name and payload_data
+    display "--- MQTT Broker Notification ---"
+    display "Received message on topic: " joined with topic_name
+    display "Message payload: " joined with payload_data
+
+    if topic_name is equal to "home/livingroom/temp" then
+        display "Temperature telemetry registered: " joined with payload_data
+        publish mqtt topic "home/livingroom/ack" with payload "Temperature received"
+    end if
+end function
+
+display "Starting Entron MQTT Message Broker on port 1883..."
+start mqtt server on port 1883 with handler onMqttPacket
+display "Entron MQTT Broker is listening on mqtt://localhost:1883"

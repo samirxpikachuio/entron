@@ -1,0 +1,27 @@
+note: Entron Web API Example
+note: Sending a GET request with JSON headers to ChatCopilot API
+
+define variable api_url as "https://dev.s4m1r.ct.ws/api/chatcopilot?prompt=hiii"
+
+display "Connecting to ChatCopilot API..."
+display "Target URL: " joined with api_url
+
+note: Define HTTP request headers in plain English using a record
+define variable request_headers as record with key "Content-Type" as "application/json"
+
+note: Fetch the API response with headers
+define variable raw_response as ""
+fetch url api_url with headers request_headers into raw_response
+
+display "=== Raw API Response ==="
+display raw_response
+
+note: Parse JSON response directly into dynamic Entron data structures
+define variable json_data as parse json raw_response
+
+display "=== Parsed API Response Fields ==="
+define variable is_success as value for key "success" in json_data
+display "Success status: " joined with is_success
+
+define variable bot_reply as value for key "result" in json_data
+display "Copilot message: " joined with bot_reply

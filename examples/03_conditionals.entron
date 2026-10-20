@@ -1,0 +1,32 @@
+note: Conditionals and Logical Comparisons in Entron
+
+define variable age as 21
+define variable has_ticket as yes
+define variable is_vip as no
+
+if age is at least 18 and has_ticket then
+    display "Access granted: You are an adult with a valid ticket."
+otherwise
+    display "Access denied: Missing requirements."
+end if
+
+define variable test_score as 85
+
+if test_score is at least 90 then
+    display "Grade: Excellent (A)"
+otherwise if test_score is at least 80 then
+    display "Grade: Great (B)"
+otherwise if test_score is at least 70 then
+    display "Grade: Good (C)"
+otherwise
+    display "Grade: Needs improvement"
+end if
+
+define variable fruit as "banana"
+if fruit is equal to "apple" or fruit is equal to "banana" then
+    display fruit joined with " is a healthy choice!"
+end if
+
+if not is_vip then
+    display "Standard guest admission"
+end if

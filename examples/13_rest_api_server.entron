@@ -1,0 +1,26 @@
+note: Entron Built-In REST API Server
+note: Pure plain English REST routing, JSON responses, and status codes
+
+define function handleApiRequest with request
+    define variable req_path as value for key "path" in request
+    define variable req_method as value for key "method" in request
+    define variable req_body as value for key "body" in request
+
+    display "Incoming request: " joined with req_method joined with " " joined with req_path
+
+    if req_path is equal to "/" then
+        return record with key "status" as 200 and key "type" as "text/html" and key "body" as "<h1>⚡ Entron REST API Server is Online!</h1><p>Routes available: /api/status, /api/users, /api/echo</p>"
+    otherwise if req_path is equal to "/api/status" then
+        return record with key "status" as 200 and key "type" as "application/json" and key "body" as "{\"status\":\"healthy\",\"server\":\"Entron\",\"uptime\":\"100%\"}"
+    otherwise if req_path is equal to "/api/users" then
+        return record with key "status" as 200 and key "type" as "application/json" and key "body" as "[{\"id\":1,\"name\":\"Alice\",\"role\":\"Admin\"},{\"id\":2,\"name\":\"Bob\",\"role\":\"Developer\"}]"
+    otherwise if req_path is equal to "/api/echo" then
+        return record with key "status" as 200 and key "type" as "application/json" and key "body" as "{\"received_payload\":" joined with req_body joined with "}"
+    otherwise
+        return record with key "status" as 404 and key "type" as "application/json" and key "body" as "{\"error\":\"Route not found\"}"
+    end if
+end function
+
+display "Starting Entron REST API server..."
+start http server on port 3001 with handler handleApiRequest
+display "Entron REST API server listening on http://localhost:3001"
