@@ -356,6 +356,31 @@ export class Interpreter {
         return MK_NOTHING();
       }
 
+      case "SwitchStmt": {
+        const discVal = await this.evaluateExpression(stmt.discriminant, env);
+
+        for (const branch of stmt.cases) {
+          if (branch.test === undefined) continue;
+          const testVal = await this.evaluateExpression(branch.test, env);
+          if (this.areValuesEqual(discVal, testVal)) {
+            const scope = new Environment(env);
+            for (const s of branch.body) {
+              await this.executeStatement(s, scope);
+            }
+            return MK_NOTHING();
+          }
+        }
+
+        const fallback = stmt.cases.find((c) => c.test === undefined);
+        if (fallback) {
+          const scope = new Environment(env);
+          for (const s of fallback.body) {
+            await this.executeStatement(s, scope);
+          }
+        }
+        return MK_NOTHING();
+      }
+
       case "TryCatchStmt": {
         const tryScope = new Environment(env);
         try {
@@ -710,8 +735,20 @@ export class Interpreter {
 
   public async evaluateExpression(expr: Expression, env: Environment): Promise<RuntimeValue> {
     switch (expr.kind) {
-      case "NumberLiteral":
-        return MK_NUMBER(expr.value);
+      case "NumberLiteral":        return MK_NUMBER(expr.value);
+
+      case "InterpolatedStringExpr": {
+        let result = "";
+        for (const part of expr.parts) {
+          if (typeof part === "string") {
+            result += part;
+          } else {
+            const val = await this.evaluateExpression(part, env);
+            result += formatValue(val);
+          }
+        }
+        return MK_STRING(result);
+      }
 
       case "StringLiteral":
         return MK_STRING(expr.value);

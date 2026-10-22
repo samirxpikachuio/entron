@@ -783,6 +783,72 @@ export class Parser {
     };
   }
 
+  /**
+   * Parses a raw string value containing `{{ expression }}` placeholders into
+   * an InterpolatedStringExpr whose parts alternate between literal string
+   * chunks and parsed expressions, in source order.
+   */
+  private parseInterpolatedString(token: Token, pos: Position): InterpolatedStringExpr {
+    const raw = token.value;
+    const parts: (string | Expression)[] = [];
+    let buffer = "";
+    let i = 0;
+
+    while (i < raw.length) {
+      if (raw[i] === "{" && raw[i + 1] === "{") {
+        const closeIndex = raw.indexOf("}}", i + 2);
+        if (closeIndex === -1) {
+          // Unterminated placeholder: treat the brace literally.
+          buffer += raw[i];
+          i++;
+          continue;
+        }
+        if (buffer.length > 0) {
+          parts.push(buffer);
+          buffer = "";
+        }
+        const inner = raw.slice(i + 2, closeIndex).trim();
+        if (inner.length > 0) {
+          parts.push(this.parseEmbeddedExpression(inner, pos));
+        }
+        i = closeIndex + 2;
+      } else {
+        buffer += raw[i];
+        i++;
+      }
+    }
+
+    if (buffer.length > 0) {
+      parts.push(buffer);
+    }
+
+    return {
+      kind: "InterpolatedStringExpr",
+      parts,
+      pos
+    };
+  }
+
+  /**
+   * Parses a single expression that was embedded inside a string via
+   * `{{ ... }}`. The embedded source is lexed and parsed in isolation;
+   * the resulting program must consist of exactly one expression statement.
+   */
+  private parseEmbeddedExpression(sourceText: string, pos: Position): Expression {
+    const lexer = new Lexer(sourceText);
+    const tokens = lexer.tokenize();
+    const subParser = new Parser(tokens);
+    const program = subParser.parse();
+
+    if (program.body.length !== 1 || program.body[0].kind !== "ExpressionStmt") {
+      throw new Error(
+        `Syntax Error at line ${pos.line}, column ${pos.column}: Invalid expression in '{{ ... }}' interpolation: ${sourceText}`
+      );
+    }
+
+    return program.body[0].expr;
+  }
+
   private parseSwitch(): SwitchStmt {
     const pos = this.pos();
     const discriminant = this.parseExpression();
@@ -1278,6 +1344,11 @@ export class Parser {
         value: this.previous().value,
         pos
       };
+    }
+
+    // String with interpolation placeholders: "Hello {{ name }}"
+    if (this.match(TokenType.INTERPOLATED_STRING)) {
+      return this.parseInterpolatedString(this.previous(), pos);
     }
 
     // Boolean

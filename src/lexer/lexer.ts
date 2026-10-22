@@ -324,6 +324,14 @@ export class Lexer {
       }
       if (char === "{" && this.source[this.pos + 1] === "{") {
         // Interpolation placeholder: {{ expression }}
+        const closeIndex = this.source.indexOf("}}", this.pos + 2);
+        if (closeIndex === -1) {
+          // Unterminated placeholder: treat '{{' as literal text.
+          strVal += "{{";
+          this.advance();
+          this.advance();
+          continue;
+        }
         hasInterpolation = true;
         strVal += "{{";
         this.advance();

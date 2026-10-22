@@ -141,3 +141,205 @@ describe("Entron Plain English Programming Language", () => {
     expect(data.data.ping).toBe("pong");
   });
 });
+
+describe("Switch statements", () => {
+  it("should execute the matching case branch", async () => {
+    const code = `
+      define variable day as 2
+      define variable label as ""
+      switch day
+        case 1
+          set label to "Monday"
+        case 2
+          set label to "Tuesday"
+        otherwise
+          set label to "Unknown"
+      end switch
+      label
+    `;
+    const { result } = await runEntron(code);
+    expect(result.type).toBe("string");
+    if (result.type === "string") {
+      expect(result.value).toBe("Tuesday");
+    }
+  });
+
+  it("should execute the otherwise branch when nothing matches", async () => {
+    const code = `
+      define variable day as 9
+      define variable label as ""
+      switch day
+        case 1
+          set label to "Monday"
+        case 2
+          set label to "Tuesday"
+        otherwise
+          set label to "Unknown"
+      end switch
+      label
+    `;
+    const { result } = await runEntron(code);
+    expect(result.type).toBe("string");
+    if (result.type === "string") {
+      expect(result.value).toBe("Unknown");
+    }
+  });
+
+  it("should treat cases strictly (number 2 does not match string \"2\")", async () => {
+    const code = `
+      define variable grade as 2
+      define variable label as ""
+      switch grade
+        case "2"
+          set label to "string case"
+        otherwise
+          set label to "default case"
+      end switch
+      label
+    `;
+    const { result } = await runEntron(code);
+    if (result.type === "string") {
+      expect(result.value).toBe("default case");
+    }
+  });
+
+  it("should stop at the first matching case", async () => {
+    const code = `
+      define variable size as 3
+      define variable label as ""
+      switch size
+        case 1
+          set label to "one"
+        case 3
+          set label to "three"
+        case 3
+          set label to "another three"
+      end switch
+      label
+    `;
+    const { result } = await runEntron(code);
+    if (result.type === "string") {
+      expect(result.value).toBe("three");
+    }
+  });
+
+  it("should execute case bodies without falling through", async () => {
+    const code = `
+      define variable touched as ""
+      define variable chosen as 1
+      switch chosen
+        case 1
+          set touched to "first"
+        case 1
+          set touched to "second"
+      end switch
+      touched
+    `;
+    const { result } = await runEntron(code);
+    if (result.type === "string") {
+      expect(result.value).toBe("first");
+    }
+  });
+
+  it("should support plain English comparisons in case tests", async () => {
+    const code = `
+      define variable total as 42
+      define variable label as ""
+      switch total
+        case 40 plus 2
+          set label to "forty two"
+        otherwise
+          set label to "other"
+      end switch
+      label
+    `;
+    const { result } = await runEntron(code);
+    if (result.type === "string") {
+      expect(result.value).toBe("forty two");
+    }
+  });
+});
+
+describe("String interpolation", () => {
+  it("should interpolate a variable into a string", async () => {
+    const code = `
+      define variable name as "Grace"
+      "Hello {{ name }}!"
+    `;
+    const { result } = await runEntron(code);
+    expect(result.type).toBe("string");
+    if (result.type === "string") {
+      expect(result.value).toBe("Hello Grace!");
+    }
+  });
+
+  it("should evaluate arithmetic expressions inside placeholders", async () => {
+    const code = `
+      define variable price as 10
+      "Total: {{ price times 3 plus 2 }}"
+    `;
+    const { result } = await runEntron(code);
+    if (result.type === "string") {
+      expect(result.value).toBe("Total: 32");
+    }
+  });
+
+  it("should interpolate multiple placeholders and literal chunks", async () => {
+    const code = `
+      define variable forename as "Ada"
+      define variable surname as "Lovelace"
+      "{{ forename }} {{ surname }} ({{ "name" }})"
+    `;
+    const { result } = await runEntron(code);
+    if (result.type === "string") {
+      expect(result.value).toBe("Ada Lovelace (name)");
+    }
+  });
+
+  it("should interpolate inside assignments and function calls", async () => {
+    const code = `
+      define function greet with who
+        return "Hi {{ who }}"
+      end function
+
+      define variable unit as "ms"
+      define variable sentence as greet with "{{ unit }} delayed"
+      sentence
+    `;
+    const { result } = await runEntron(code);
+    if (result.type === "string") {
+      expect(result.value).toBe("Hi ms delayed");
+    }
+  });
+
+  it("should format non-string values in placeholders", async () => {
+    const code = `
+      define variable items as list containing 1 and 2 and 3
+      "count is {{ length of items }}"
+    `;
+    const { result } = await runEntron(code);
+    if (result.type === "string") {
+      expect(result.value).toBe("count is 3");
+    }
+  });
+
+  it("should keep plain strings unaffected (no interpolation markers)", async () => {
+    const code = `"nothing to see here"`;
+    const { result } = await runEntron(code);
+    expect(result.type).toBe("string");
+    if (result.type === "string") {
+      expect(result.value).toBe("nothing to see here");
+    }
+  });
+
+  it("should pass an unterminated placeholder through literally", async () => {
+    const code = `
+      define variable name as "Grace"
+      "Hello {{ name"
+    `;
+    const { result } = await runEntron(code);
+    if (result.type === "string") {
+      expect(result.value).toBe("Hello {{ name");
+    }
+  });
+});
