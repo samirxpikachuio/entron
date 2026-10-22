@@ -19,5 +19,8 @@
     "natural-language"
   ],
   "author": "Entron Core Team",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^26.6.5"
+  }
 }
