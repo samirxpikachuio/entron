@@ -23,12 +23,12 @@
   ],
   "folding": {
     "markers": {
-      "start": "^\\s*(define\\s+function|if|repeat|while|for\\s+each|count\\s+from|try)\\b",
-      "end": "^\\s*end\\s+(function|if|repeat|while|for|count|try)\\b"
+      "start": "^\\s*(define\\s+function|if|repeat|while|for\\s+each|count\\s+from|try|switch)\\b",
+      "end": "^\\s*end\\s+(function|if|repeat|while|for|count|try|switch)\\b"
     }
   },
   "indentationRules": {
-    "increaseIndentPattern": "^\\s*(define\\s+function|if|otherwise|otherwise\\s+if|repeat|while|for\\s+each|count\\s+from|try).*$",
-    "decreaseIndentPattern": "^\\s*(otherwise|otherwise\\s+if|end\\s+(function|if|repeat|while|for|count|try))\\b.*$"
+    "increaseIndentPattern": "^\\s*(define\\s+function|if|otherwise|otherwise\\s+if|switch|case|repeat|while|for\\s+each|count\\s+from|try).*$",
+    "decreaseIndentPattern": "^\\s*(otherwise|otherwise\\s+if|case|end\\s+(function|if|repeat|while|for|count|try|switch))\\b.*$"
   }
 }

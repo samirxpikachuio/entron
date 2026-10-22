@@ -1,0 +1,26 @@
+note: String Interpolation in Entron
+note: Embed any expression directly inside a string with {{ ... }}.
+
+define variable hero as "Grace Hopper"
+define variable level as 17
+
+display "Hello {{ hero }}!"
+display "Level {{ level }} with {{ level times 3 }} experience points."
+
+note: Interpolate plain English expressions, not just plain variables.
+display "Half of level: {{ level divided by 2 }}."
+display "Uppercased name: {{ uppercase of hero }}."
+
+note: Works inside collections and records too.
+define variable fruit as list containing "apple" and "kiwi" and "fig"
+display "The basket holds {{ fruit }} — that is {{ length of fruit }} fruits."
+
+define variable user as record with key "name" as "Ada" and key "role" as "Engineer"
+display "{{ value for key "name" in user }} is our {{ value for key "role" in user }}."
+
+note: Functions can be defined right on top of interpolation.
+define function cheer with who
+    return "Go {{ who }} go!"
+end function
+
+display cheer with "{{ hero }}"

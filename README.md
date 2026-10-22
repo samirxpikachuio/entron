@@ -116,6 +116,20 @@ otherwise
 end if
 ```
 
+#### Switch Statements
+When comparing one value against many fixed options, `switch` is cleaner than a chain of `otherwise if`:
+```entron
+switch day
+    case 1
+        set label to "Monday"
+    case 2
+        set label to "Tuesday"
+    otherwise
+        set label to "Unknown"
+end switch
+```
+Only the first matching branch runs (no fall-through), comparisons are strictly typed (number `2` does not match string `"2"`), case tests can be any expression (e.g. `case 40 plus 2`), and the `otherwise` branch runs when nothing matches.
+
 Plain English comparisons available:
 - `is equal to` (or `equals`)
 - `is not equal to` (or `is not`)
@@ -254,6 +268,20 @@ end try
 ```
 
 ### 11. Strings & Async Timers
+#### String Interpolation
+Embed any expression directly in a string with `{{ ... }}`—no manual concatenation needed:
+```entron
+define variable name as "Developer"
+define variable score as 95
+
+display "Hello {{ name }}!"
+display "Your score: {{ score }} ({{ score divided by 2 }}%)"
+
+note: Works everywhere strings do, including function arguments:
+display "Greetings, {{ value for key "name" in user }}"
+```
+Placeholders are evaluated strictly (`{{ "2" }}` stays a string), and an unterminated `{{` is kept as literal text.
+
 ```entron
 define variable str as "  Entron Language  "
 display trimmed str
@@ -340,6 +368,8 @@ Run any of the provided demonstration scripts in `examples/`:
 | `examples/14_websocket_server.entron` | Event-driven WebSocket server with real-time echoes |
 | `examples/15_graphql_server.entron` | GraphQL server with schema, resolvers & web explorer |
 | `examples/16_mqtt_broker_server.entron` | MQTT message broker on port 1883 with telemetry |
+| `examples/17_switch.entron` | Switch statements, expressions in case tests, strict matching |
+| `examples/18_string_interpolation.entron` | `{{ ... }}` string interpolation with variables, math, and records |
 
 ---
 
@@ -349,7 +379,7 @@ Run the full automated test suite:
 ```powershell
 bun test
 ```
-All 9 comprehensive suites test lexing, parsing, runtime semantics, arithmetic, recursion, lists, records, error trapping, string manipulation, and built-in REST and GraphQL servers.
+22 automated tests test lexing, parsing, runtime semantics, arithmetic, recursion, lists, records, error trapping, string manipulation, switch statements, string interpolation, and built-in REST and GraphQL servers.
 
 ---
 

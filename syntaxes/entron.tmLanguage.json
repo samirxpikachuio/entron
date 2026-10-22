@@ -17,6 +17,29 @@
     { "include": "#identifiers" }
   ],
   "repository": {
+    "interpolation": {
+      "patterns": [
+        {
+          "name": "meta.template.expression.entron",
+          "begin": "\\{\\{",
+          "beginCaptures": {
+            "0": { "name": "punctuation.definition.template-expression.begin.entron" }
+          },
+          "end": "\\}\\}",
+          "endCaptures": {
+            "0": { "name": "punctuation.definition.template-expression.end.entron" }
+          },
+          "patterns": [
+            { "include": "#strings" },
+            { "include": "#numbers" },
+            { "include": "#constants" },
+            { "include": "#operators" },
+            { "include": "#builtins" },
+            { "include": "#identifiers" }
+          ]
+        }
+      ]
+    },
     "comments": {
       "patterns": [
         {
@@ -32,6 +55,7 @@
           "begin": "\"",
           "end": "\"",
           "patterns": [
+            { "include": "#interpolation" },
             {
               "name": "constant.character.escape.entron",
               "match": "\\\\."
@@ -43,6 +67,7 @@
           "begin": "'",
           "end": "'",
           "patterns": [
+            { "include": "#interpolation" },
             {
               "name": "constant.character.escape.entron",
               "match": "\\\\."
@@ -124,12 +149,16 @@
           "match": "\\b(try|otherwise\\s+on\\s+error|end\\s+try)\\b"
         },
         {
+          "name": "keyword.control.switch.entron",
+          "match": "\\b(switch|case)\\b"
+        },
+        {
           "name": "keyword.control.return.entron",
           "match": "\\b(return)\\b"
         },
         {
           "name": "keyword.control.end.entron",
-          "match": "\\b(end\\s+(function|repeat|while|for|count|if|try))\\b"
+          "match": "\\b(end\\s+(function|repeat|while|for|count|if|try|switch))\\b"
         }
       ]
     },

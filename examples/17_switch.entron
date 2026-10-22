@@ -1,0 +1,40 @@
+note: Switch Statements in Entron
+note: Run any branch of fixed options cleanly instead of a chain of otherwise if.
+
+define variable day_number as 2
+define variable day_name as "Unknown"
+
+switch day_number
+    case 1
+        set day_name to "Monday"
+    case 2
+        set day_name to "Tuesday"
+    case 3
+        set day_name to "Wednesday"
+    case 4
+        set day_name to "Thursday"
+    case 5
+        set day_name to "Friday"
+    otherwise
+        set day_name to "Weekend"
+end switch
+
+display "Day " joined with day_number joined with " is " joined with day_name
+
+note: Case tests can be any expression, not just constants.
+define variable shipping_cost as 120
+switch shipping_cost
+    case 100 plus 20
+        display "Free shipping unlocked!"
+    otherwise
+        display "Shipping fee applies."
+end switch
+
+note: Matching is strictly typed, so number 2 does not match string "2".
+define variable code as 2
+switch code
+    case "2"
+        display "Matched a text code."
+    otherwise
+        display "Numbers and text never collide: " joined with code
+end switch
