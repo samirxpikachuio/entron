@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7c3aed"/>
+      <stop offset="50%" stop-color="#06b6d4"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="4" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="200" height="200" rx="36" fill="#0f172a"/>
+  <circle cx="100" cy="100" r="72" fill="none" stroke="url(#g)" stroke-width="6" filter="url(#glow)"/>
+  <path d="M62 88 L100 58 L138 88 L138 138 L62 138 Z" fill="url(#g)" opacity="0.9"/>
+  <text x="100" y="122" text-anchor="middle" font-family="monospace" font-size="46" font-weight="900" fill="#ffffff">E</text>
+  <text x="100" y="178" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="700" fill="url(#g)">ENTRON</text>
+</svg>

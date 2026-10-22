@@ -6,3 +6,9 @@ define variable creator as "World"
 
 display "Hello, " joined with creator joined with "! Welcome to " joined with language_name joined with "."
 display "In Entron, everything is written in clean, expressive English instead of cryptic symbols."
+
+display "Let's do some simple math. For example, let's add 5 and 3."
+define variable num1 as 5   
+define variable num2 as 3
+define variable sum as num1 plus num2
+display "The sum of " joined with num1 joined with " and " joined with num2 joined with " is " joined with sum joined with "."

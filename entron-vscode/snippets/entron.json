@@ -1,0 +1,316 @@
+{
+  "Entron Hello World": {
+    "prefix": "hello",
+    "body": [
+      "note: Hello World in Entron",
+      "",
+      "define variable name as \"World\"",
+      "display \"Hello, \" joined with name joined with \"!\""
+    ],
+    "description": "Basic Hello World program"
+  },
+  "Define Variable": {
+    "prefix": "defvar",
+    "body": [
+      "define variable ${1:name} as ${2:value}"
+    ],
+    "description": "Define a new variable"
+  },
+  "Create Variable": {
+    "prefix": "create",
+    "body": [
+      "create ${1:name} as ${2:value}"
+    ],
+    "description": "Create a variable with shorthand syntax"
+  },
+  "Set Variable": {
+    "prefix": "set",
+    "body": [
+      "set ${1:name} to ${2:value}"
+    ],
+    "description": "Assign/reassign a variable"
+  },
+  "Define Function": {
+    "prefix": "deffun",
+    "body": [
+      "define function ${1:function_name} with ${2:param}",
+      "    ${3:note: Function body here}",
+      "    return ${4:result}",
+      "end function"
+    ],
+    "description": "Define a function with parameters"
+  },
+  "Define Function (no params)": {
+    "prefix": "deffun0",
+    "body": [
+      "define function ${1:function_name}",
+      "    ${2:note: Function body here}",
+      "    return ${3:result}",
+      "end function"
+    ],
+    "description": "Define a function with no parameters"
+  },
+  "Call Function": {
+    "prefix": "call",
+    "body": [
+      "call ${1:function_name} with ${2:argument}"
+    ],
+    "description": "Call a function with arguments"
+  },
+  "If Statement": {
+    "prefix": "if",
+    "body": [
+      "if ${1:condition} then",
+      "    ${2:display \"true branch\"}",
+      "end if"
+    ],
+    "description": "If conditional"
+  },
+  "If / Otherwise": {
+    "prefix": "ifelse",
+    "body": [
+      "if ${1:condition} then",
+      "    ${2:display \"true branch\"}",
+      "otherwise",
+      "    ${3:display \"false branch\"}",
+      "end if"
+    ],
+    "description": "If/otherwise (if-else) conditional"
+  },
+  "If / Otherwise If / Otherwise": {
+    "prefix": "ifelseif",
+    "body": [
+      "if ${1:first_condition} then",
+      "    ${2:display \"first branch\"}",
+      "otherwise if ${3:second_condition} then",
+      "    ${4:display \"second branch\"}",
+      "otherwise",
+      "    ${5:display \"default branch\"}",
+      "end if"
+    ],
+    "description": "If/otherwise if/otherwise chain"
+  },
+  "Switch Statement": {
+    "prefix": "switch",
+    "body": [
+      "switch ${1:variable}",
+      "    case ${2:value1}",
+      "        ${3:display \"matched first\"}",
+      "    case ${4:value2}",
+      "        ${5:display \"matched second\"}",
+      "    otherwise",
+      "        ${6:display \"no match\"}",
+      "end switch"
+    ],
+    "description": "Switch statement"
+  },
+  "Repeat Loop": {
+    "prefix": "repeat",
+    "body": [
+      "repeat ${1:3} times",
+      "    ${2:display \"Repeating...\"}",
+      "end repeat"
+    ],
+    "description": "Repeat loop N times"
+  },
+  "While Loop": {
+    "prefix": "while",
+    "body": [
+      "define variable ${1:counter} as ${2:1}",
+      "while ${1:counter} is at most ${3:10} do",
+      "    ${4:display ${1:counter}}",
+      "    add 1 to ${1:counter}",
+      "end while"
+    ],
+    "description": "While loop with counter"
+  },
+  "Count Loop": {
+    "prefix": "count",
+    "body": [
+      "count from ${1:1} to ${2:10} as ${3:i} do",
+      "    ${4:display ${3:i}}",
+      "end count"
+    ],
+    "description": "Count from N to M loop"
+  },
+  "Count Loop with Step": {
+    "prefix": "countby",
+    "body": [
+      "count from ${1:10} to ${2:2} by negative ${3:2} as ${4:i} do",
+      "    ${5:display ${4:i}}",
+      "end count"
+    ],
+    "description": "Count loop with custom step"
+  },
+  "For Each Loop": {
+    "prefix": "foreach",
+    "body": [
+      "for each ${1:item} in ${2:collection} do",
+      "    ${3:display ${1:item}}",
+      "end for"
+    ],
+    "description": "For-each loop over a collection"
+  },
+  "Try / Error Handling": {
+    "prefix": "try",
+    "body": [
+      "try",
+      "    ${1:note: Code that might fail}",
+      "    ${2:display \"running...\"}",
+      "otherwise on error ${3:err}",
+      "    display \"Error: \" joined with ${3:err}",
+      "end try"
+    ],
+    "description": "Try/otherwise on error block"
+  },
+  "Define List": {
+    "prefix": "list",
+    "body": [
+      "define variable ${1:items} as list containing ${2:\"item1\"} and ${3:\"item2\"} and ${4:\"item3\"}"
+    ],
+    "description": "Define a list with initial values"
+  },
+  "Define Record": {
+    "prefix": "record",
+    "body": [
+      "define variable ${1:data} as record with key \"${2:field1}\" as ${3:\"value1\"} and key \"${4:field2}\" as ${5:\"value2\"}"
+    ],
+    "description": "Define a record (dictionary)"
+  },
+  "HTTP Server": {
+    "prefix": "httpserver",
+    "body": [
+      "define function ${1:handleRequest} with request",
+      "    define variable req_path as value for key \"path\" in request",
+      "    define variable req_method as value for key \"method\" in request",
+      "",
+      "    if req_path is equal to \"/\" then",
+      "        return record with key \"status\" as 200 and key \"type\" as \"text/html\" and key \"body\" as \"<h1>Entron Server</h1>\"",
+      "    otherwise",
+      "        return record with key \"status\" as 404 and key \"type\" as \"application/json\" and key \"body\" as \"{\\\"error\\\":\\\"Not Found\\\"}\"",
+      "    end if",
+      "end function",
+      "",
+      "display \"Starting HTTP server on port ${2:3000}...\"",
+      "start http server on port ${2:3000} with handler ${1:handleRequest}",
+      "display \"Server running at http://localhost:${2:3000}\""
+    ],
+    "description": "HTTP REST API server"
+  },
+  "WebSocket Server": {
+    "prefix": "wsserver",
+    "body": [
+      "define function ${1:onConnected} with client_id",
+      "    display \"Client connected: \" joined with client_id",
+      "    send message \"Welcome!\" to socket client_id",
+      "end function",
+      "",
+      "define function ${2:onMessage} with client_id and message_text",
+      "    display \"Message from \" joined with client_id joined with \": \" joined with message_text",
+      "    send message \"Echo: \" joined with message_text to socket client_id",
+      "end function",
+      "",
+      "display \"Starting WebSocket server on port ${3:8080}...\"",
+      "start websocket server on port ${3:8080} with on open ${1:onConnected} and on message ${2:onMessage}",
+      "display \"WebSocket server running on ws://localhost:${3:8080}\""
+    ],
+    "description": "WebSocket real-time server"
+  },
+  "GraphQL Server": {
+    "prefix": "gqlserver",
+    "body": [
+      "define variable schema as \"type Query { ${1:hello}: String }\"",
+      "define variable resolvers as record with key \"${1:hello}\" as \"${2:Hello from Entron GraphQL!}\"",
+      "",
+      "display \"Starting GraphQL server on port ${3:4000}...\"",
+      "start graphql server on port ${3:4000} with schema schema and resolvers resolvers",
+      "display \"GraphQL server running at http://localhost:${3:4000}\""
+    ],
+    "description": "GraphQL server with schema and resolvers"
+  },
+  "MQTT Server": {
+    "prefix": "mqttserver",
+    "body": [
+      "define function ${1:onMqttMessage} with topic and payload",
+      "    display \"Message on \" joined with topic joined with \": \" joined with payload",
+      "    publish mqtt topic \"${2:ack/status}\" with payload \"Received\"",
+      "end function",
+      "",
+      "display \"Starting MQTT server on port ${3:1883}...\"",
+      "start mqtt server on port ${3:1883} with handler ${1:onMqttMessage}",
+      "display \"MQTT broker running on port ${3:1883}\""
+    ],
+    "description": "MQTT message broker server"
+  },
+  "Single Line Comment": {
+    "prefix": "note",
+    "body": [
+      "note: ${1:Your comment here}"
+    ],
+    "description": "Single-line comment"
+  },
+  "String Interpolation": {
+    "prefix": "interp",
+    "body": [
+      "display \"${1:Hello} {{ ${2:variable_name} }}!\""
+    ],
+    "description": "String with {{ }} interpolation"
+  },
+  "Fetch URL": {
+    "prefix": "fetch",
+    "body": [
+      "define variable ${1:response} as fetch url \"${2:https://api.example.com/data}\" with headers record with key \"Content-Type\" as \"application/json\"",
+      "display ${1:response}"
+    ],
+    "description": "Fetch a URL with headers"
+  },
+  "File Read": {
+    "prefix": "readfile",
+    "body": [
+      "if file exists \"${1:filename.txt}\" then",
+      "    define variable ${2:contents} as \"\"",
+      "    read file \"${1:filename.txt}\" into ${2:contents}",
+      "    display ${2:contents}",
+      "otherwise",
+      "    display \"File not found: ${1:filename.txt}\"",
+      "end if"
+    ],
+    "description": "Read a file safely"
+  },
+  "File Write": {
+    "prefix": "writefile",
+    "body": [
+      "write \"${1:Hello, file!}\" to file \"${2:output.txt}\"",
+      "display \"Written to ${2:output.txt}\""
+    ],
+    "description": "Write text to a file"
+  },
+  "Math Operations": {
+    "prefix": "math",
+    "body": [
+      "define variable ${1:root} as math square root of ${2:144}",
+      "define variable ${3:power} as math power of ${4:2} to ${5:8}",
+      "define variable ${6:abs_val} as math absolute value of negative ${7:42}",
+      "display \"sqrt(${2:144}) = \" joined with ${1:root}",
+      "display \"2^${5:8} = \" joined with ${3:power}",
+      "display \"abs(-${7:42}) = \" joined with ${6:abs_val}"
+    ],
+    "description": "Common math operations"
+  },
+  "Wait / Async Timer": {
+    "prefix": "wait",
+    "body": [
+      "display \"Waiting ${1:500} milliseconds...\"",
+      "wait ${1:500} milliseconds",
+      "display \"Done waiting!\""
+    ],
+    "description": "Async delay / timer"
+  },
+  "Display": {
+    "prefix": "display",
+    "body": [
+      "display ${1:\"message\"}"
+    ],
+    "description": "Print output to console"
+  }
+}

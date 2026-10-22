@@ -1,0 +1,5 @@
+# Exclude build artifacts and temp files from the VSIX package
+.vsix-extracted/
+*.vsix
+install-extension.ps1
+.vscodeignore

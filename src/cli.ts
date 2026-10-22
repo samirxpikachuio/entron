@@ -9,12 +9,17 @@ import { Environment } from "./runtime/environment";
 import { formatValue } from "./runtime/values";
 import { highlightEntron } from "./utils/highlighter";
 
-const VERSION = "1.0.0";
+const VERSION = "1.0.1";
 
 const BANNER = `
-  ⚡ ENTRON PROGRAMMING LANGUAGE ⚡
-  Version ${VERSION} - Plain English Dynamic Language
-  Type 'exit' to quit, 'help' for examples.
+  ███████╗███╗   ██╗████████╗██████╗  ██████╗ ███╗   ██╗
+  ██╔════╝████╗  ██║╚══██╔══╝██╔══██╗██╔═══██╗████╗  ██║
+  █████╗  ██╔██╗ ██║   ██║   ██████╔╝██║   ██║██╔██╗ ██║
+  ██╔══╝  ██║╚██╗██║   ██║   ██╔══██╗██║   ██║██║╚██╗██║
+  ███████╗██║ ╚████║   ██║   ██║  ██║╚██████╔╝██║ ╚████║
+  ╚══════╝╚═╝  ╚═══╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝
+  v${VERSION}  —  The Modern Plain-English Programming Language
+  Type 'exit' to quit, 'help' for commands, 'syntax' for reference.
 `;
 
 async function main() {
@@ -29,6 +34,11 @@ async function main() {
 
   if (command === "--version" || command === "-v") {
     console.log(`Entron v${VERSION}`);
+    return;
+  }
+
+  if (command === "syntax") {
+    printSyntax();
     return;
   }
 
@@ -161,17 +171,83 @@ async function startRepl() {
 
 function printHelp() {
   console.log(`
-Entron Programming Language - Plain English Dynamic Language
+Entron Programming Language - Plain English Dynamic Language (v${VERSION})
 
 Usage:
   entron run <filename>    Execute an Entron source code file (.entron or .ent)
   entron repl              Launch interactive REPL session
   entron <filename>        Directly execute a file
+  entron syntax            Print syntax reference
   entron --version         Show Entron version
   entron --help            Display this help message
 
 Example:
   entron run examples/01_hello.entron
+`);
+}
+
+function printSyntax() {
+  console.log(`
+Entron v${VERSION} — Syntax Reference
+=====================================
+
+Variables:
+  define variable name as value
+  define name as value
+  set name to value
+
+Output:
+  display value
+  display value joined with "text"
+
+Input:
+  ask "prompt" into variable
+
+Math:
+  plus, minus, times, divided by, modulo
+  e.g. display 10 plus 25 times 2
+
+Comparisons:
+  is equal to, is not equal to
+  is greater than, is less than
+  is greater than or equal to, is less than or equal to
+
+Logic:
+  and, or, not
+
+Conditionals:
+  if condition then
+    ...
+  else
+    ...
+  end if
+
+Loops:
+  repeat N times
+    ...
+  end repeat
+
+  while condition
+    ...
+  end while
+
+  for each item in list
+    ...
+  end for
+
+Lists:
+  create nums as list containing 1 and 2 and 3
+  append value to list
+  remove value from list
+
+Functions:
+  function name with params
+    ...
+    return value
+  end function
+  call name with args
+
+Full reference: see SYNTAX.md in the Entron repository.
 `);
 }
 

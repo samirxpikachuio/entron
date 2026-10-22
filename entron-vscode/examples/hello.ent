@@ -1,0 +1,25 @@
+note: Hello from Entron!
+note: A short demonstration of variables, output, and loops.
+
+define variable greeting as "Hello from Entron!"
+display greeting
+
+note: Count loop — print numbers 1 through 5
+count from 1 to 5 as i do
+    display "Count: " joined with i
+end count
+
+note: Repeat loop — repeat a fixed number of times
+repeat 3 times
+    display "Entron is working."
+end repeat
+
+note: For each loop — iterate over a list
+define variable languages as list containing "Entron" and "Python" and "JavaScript"
+for each lang in languages do
+    display "Language: " joined with lang
+end for
+
+note: String interpolation
+define variable version as 1
+display "Entron v{{ version }} — plain English programming!"

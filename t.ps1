@@ -1,0 +1,1 @@
+Write-Host "ERROR: Installation failed (exit code $LASTEXITCODE)." -ForegroundColor Red

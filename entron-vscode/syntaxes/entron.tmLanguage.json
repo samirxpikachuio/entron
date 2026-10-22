@@ -1,0 +1,222 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Entron",
+  "scopeName": "source.entron",
+  "fileTypes": ["entron", "ent"],
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#strings" },
+    { "include": "#numbers" },
+    { "include": "#constants" },
+    { "include": "#server_statements" },
+    { "include": "#function_definition" },
+    { "include": "#keywords_control" },
+    { "include": "#keywords_definitions" },
+    { "include": "#operators" },
+    { "include": "#builtins" },
+    { "include": "#identifiers" }
+  ],
+  "repository": {
+    "interpolation": {
+      "patterns": [
+        {
+          "name": "meta.template.expression.entron",
+          "begin": "\\{\\{",
+          "beginCaptures": {
+            "0": { "name": "punctuation.definition.template-expression.begin.entron" }
+          },
+          "end": "\\}\\}",
+          "endCaptures": {
+            "0": { "name": "punctuation.definition.template-expression.end.entron" }
+          },
+          "patterns": [
+            { "include": "#strings" },
+            { "include": "#numbers" },
+            { "include": "#constants" },
+            { "include": "#operators" },
+            { "include": "#builtins" },
+            { "include": "#identifiers" }
+          ]
+        }
+      ]
+    },
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.entron",
+          "match": "\\b(note:|comment:|remark:|--).*$"
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.entron",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            { "include": "#interpolation" },
+            {
+              "name": "constant.character.escape.entron",
+              "match": "\\\\."
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.single.entron",
+          "begin": "'",
+          "end": "'",
+          "patterns": [
+            { "include": "#interpolation" },
+            {
+              "name": "constant.character.escape.entron",
+              "match": "\\\\."
+            }
+          ]
+        }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "name": "constant.numeric.entron",
+          "match": "\\b\\d+(\\.\\d+)?\\b"
+        }
+      ]
+    },
+    "constants": {
+      "patterns": [
+        {
+          "name": "constant.language.boolean.entron",
+          "match": "\\b(true|false|yes|no)\\b"
+        },
+        {
+          "name": "constant.language.null.entron",
+          "match": "\\b(nothing|none|null)\\b"
+        },
+        {
+          "name": "support.constant.math.entron",
+          "match": "\\b(pi|euler)\\b"
+        }
+      ]
+    },
+    "server_statements": {
+      "patterns": [
+        {
+          "name": "keyword.other.server.entron",
+          "match": "\\b(start\\s+(http|websocket|graphql|mqtt)\\s+server|publish\\s+mqtt|send\\s+message|to\\s+socket)\\b"
+        },
+        {
+          "name": "entity.name.section.event.entron",
+          "match": "\\b(on\\s+(open|message|close))\\b"
+        },
+        {
+          "name": "support.type.server.entron",
+          "match": "\\b(schema|resolvers|headers|handler|port|topic|payload)\\b"
+        }
+      ]
+    },
+    "function_definition": {
+      "patterns": [
+        {
+          "match": "\\b(define\\s+function)\\s+([a-zA-Z_][a-zA-Z0-9_]*)\\b",
+          "captures": {
+            "1": { "name": "keyword.declaration.function.entron" },
+            "2": { "name": "entity.name.function.entron" }
+          }
+        },
+        {
+          "match": "\\b(call)\\s+([a-zA-Z_][a-zA-Z0-9_]*)\\b",
+          "captures": {
+            "1": { "name": "keyword.control.call.entron" },
+            "2": { "name": "entity.name.function.call.entron" }
+          }
+        }
+      ]
+    },
+    "keywords_control": {
+      "patterns": [
+        {
+          "name": "keyword.control.conditional.entron",
+          "match": "\\b(if|then|otherwise\\s+if|otherwise|else|end\\s+if)\\b"
+        },
+        {
+          "name": "keyword.control.loop.entron",
+          "match": "\\b(repeat|times|end\\s+repeat|while|do|end\\s+while|for\\s+each|in|end\\s+for|count\\s+from|to|by|as|end\\s+count|break\\s+loop|continue\\s+loop)\\b"
+        },
+        {
+          "name": "keyword.control.exception.entron",
+          "match": "\\b(try|otherwise\\s+on\\s+error|end\\s+try)\\b"
+        },
+        {
+          "name": "keyword.control.switch.entron",
+          "match": "\\b(switch|case)\\b"
+        },
+        {
+          "name": "keyword.control.return.entron",
+          "match": "\\b(return)\\b"
+        },
+        {
+          "name": "keyword.control.end.entron",
+          "match": "\\b(end\\s+(function|repeat|while|for|count|if|try|switch))\\b"
+        }
+      ]
+    },
+    "keywords_definitions": {
+      "patterns": [
+        {
+          "name": "keyword.declaration.variable.entron",
+          "match": "\\b(define\\s+variable|create|set|change|add|subtract|with|as|into|from)\\b"
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "name": "keyword.operator.arithmetic.entron",
+          "match": "\\b(plus|minus|times|multiplied\\s+by|divided\\s+by|modulo|remainder\\s+of|negative)\\b"
+        },
+        {
+          "name": "keyword.operator.comparison.entron",
+          "match": "\\b(is\\s+equal\\s+to|equals|is\\s+not\\s+equal\\s+to|is\\s+not|is\\s+greater\\s+than(\\s+or\\s+equal\\s+to)?|is\\s+less\\s+than(\\s+or\\s+equal\\s+to)?|is\\s+at\\s+least|is\\s+at\\s+most|contains)\\b"
+        },
+        {
+          "name": "keyword.operator.logical.entron",
+          "match": "\\b(and|or|not)\\b"
+        },
+        {
+          "name": "keyword.operator.string.entron",
+          "match": "\\b(joined\\s+with|split\\s+by)\\b"
+        }
+      ]
+    },
+    "builtins": {
+      "patterns": [
+        {
+          "name": "support.function.io.entron",
+          "match": "\\b(display|print|ask|read\\s+file|write\\s+to\\s+file|append\\s+to\\s+file|file\\s+exists|fetch\\s+url|parse\\s+json|wait)\\b"
+        },
+        {
+          "name": "support.function.collections.entron",
+          "match": "\\b(list\\s+containing|list\\s+of|empty\\s+list|record\\s+with|empty\\s+record|item\\s+at\\s+position|first\\s+item\\s+of|last\\s+item\\s+of|value\\s+for\\s+key|get\\s+key|keys\\s+of|values\\s+of|length\\s+of|reversed|sorted)\\b"
+        },
+        {
+          "name": "support.function.math.entron",
+          "match": "\\b(math\\s+square\\s+root\\s+of|math\\s+absolute\\s+value\\s+of|math\\s+power\\s+of|math\\s+floor\\s+of|math\\s+ceil\\s+of|math\\s+round\\s+of|random\\s+number\\s+between|current\\s+timestamp)\\b"
+        },
+        {
+          "name": "support.type.time.entron",
+          "match": "\\b(milliseconds|seconds)\\b"
+        }
+      ]
+    },
+    "identifiers": {
+      "patterns": [
+        {
+          "name": "variable.other.entron",
+          "match": "\\b[a-zA-Z_][a-zA-Z0-9_]*\\b"
+        }
+      ]
+    }
+  }
+}
