@@ -1,0 +1,29 @@
+note: Entron - Three Levels of English (natural vocabulary)
+
+note: Level 1 (existing)
+define variable age as 18
+display age
+
+note: Level 2 (simple)
+make score equal to 100
+show score
+
+note: Level 3 (natural)
+let the total be 0
+make the total 5 more
+tell me the total
+
+if the age is 18 or older
+    say "Adult"
+otherwise
+    say "Underage"
+end
+
+say "Hello" 3 times
+
+make a list of fruits: "Apple", "Mango"
+add "Orange" to the list
+tell me the first fruit
+
+turn "hello" into uppercase
+tell me the result

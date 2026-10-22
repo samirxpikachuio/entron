@@ -9,7 +9,7 @@ import { Environment } from "./runtime/environment";
 import { formatValue } from "./runtime/values";
 import { highlightEntron } from "./utils/highlighter";
 
-const VERSION = "1.0.1";
+const VERSION = "1.0.3";
 
 const BANNER = `
   ███████╗███╗   ██╗████████╗██████╗  ██████╗ ███╗   ██╗

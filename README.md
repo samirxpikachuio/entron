@@ -373,6 +373,77 @@ Run any of the provided demonstration scripts in `examples/`:
 
 ---
 
+## 🗣️ Three Levels of English
+
+Entron v1.0.3 accepts **three levels of English for every construct**. Pick the level that reads best to you — all three run.
+
+| Level | Purpose |
+|---|---|
+| 🟦 Level 1 · Existing | Original syntax, kept for compatibility |
+| 🟩 Level 2 · Simple | Easy, predictable English for beginners |
+| 🟨 Level 3 · Natural | Natural sentences that read like instructions to a computer |
+
+### 1. Variables
+| Level 1 | Level 2 | Level 3 |
+|---|---|---|
+| `define variable age as 18` / `display age` | `make age equal to 18` / `show age` | `let the age be 18` / `tell me the age` |
+
+### 2. Changing values
+| Level 1 | Level 2 | Level 3 |
+|---|---|---|
+| `set score to 100` / `add 10 to score` | `change score to 100` / `increase score by 10` | `let the score be 100` / `make the score 10 more` |
+
+### 3. Asking for input
+| Level 1 | Level 2 | Level 3 |
+|---|---|---|
+| `ask "What is your name?" into name` | `ask "What is your name?" and save as name` | `ask me for my name` |
+
+### 4. Math
+| Level 1 | Level 2 | Level 3 |
+|---|---|---|
+| `define variable total as price plus tax` | `make total equal to price plus tax` | `add the price and tax together` |
+
+### 5. Conditions
+| Level 1 | Level 2 | Level 3 |
+|---|---|---|
+| `if age is at least 18 then ... otherwise ... end if` | `if age is 18 or more then ...` | `if the age is 18 or older ... say "Adult" ... end` |
+
+### 6. Repeating
+| Level 1 | Level 2 | Level 3 |
+|---|---|---|
+| `repeat 5 times ... end repeat` | `repeat 5 times ... end repeat` | `say "Hello" 5 times` |
+
+### 7. Lists
+| Level 1 | Level 2 | Level 3 |
+|---|---|---|
+| `define variable fruits as list containing "Apple" and "Mango"` | `make fruits contain "Apple" and "Mango"` | `make a list of fruits: "Apple", "Mango"` |
+
+### 8. Functions
+| Level 1 | Level 2 | Level 3 |
+|---|---|---|
+| `define function greet with name ... end function` / `call greet with "Samir"` | `make a function called greet with name ... end function` / `run greet with "Samir"` | `teach the computer to greet someone named name ... end` / `greet Samir` |
+
+### 9. Strings
+| Level 1 | Level 2 | Level 3 |
+|---|---|---|
+| `define variable message as uppercase of "hello"` | `make message equal to uppercase of "hello"` | `turn "hello" into uppercase` |
+
+### 10. Files
+| Level 1 | Level 2 | Level 3 |
+|---|---|---|
+| `write "Hello!" to file "note.txt"` | `write "Hello!" to "note.txt"` | `save "Hello!" in "note.txt"` |
+
+### 11. Waiting
+| Level 1 | Level 2 | Level 3 |
+|---|---|---|
+| `wait 2 seconds` | `wait for 2 seconds` | `wait for 2 seconds then say "Done"` |
+
+### 12. Web requests
+| Level 1 | Level 2 | Level 3 |
+|---|---|---|
+| `define variable response as fetch url "https://example.com"` | `get data from "https://example.com"` | `get the data from "https://example.com"` |
+
+See `SYNTAX.md` and `examples/19_natural_english.entron` for runnable samples.
 ## 🧪 Testing
 
 Run the full automated test suite:

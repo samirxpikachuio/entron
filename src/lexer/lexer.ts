@@ -1,4 +1,5 @@
 import { Token, TokenType } from "./token";
+import { normalizeNatural } from "../utils/normalizer";
 
 const KEYWORDS: Record<string, TokenType> = {
   define: TokenType.DEFINE,
@@ -157,8 +158,8 @@ export class Lexer {
   private line: number = 1;
   private column: number = 1;
 
-  constructor(source: string) {
-    this.source = source;
+  constructor(source: string, normalize: boolean = true) {
+    this.source = normalize ? normalizeNatural(source) : source;
   }
 
   public tokenize(): Token[] {

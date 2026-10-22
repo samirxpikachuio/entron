@@ -1,6 +1,6 @@
 {
   "name": "entron",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Entron: The modern dynamic programming language written in plain English",
   "main": "src/index.ts",
   "bin": {

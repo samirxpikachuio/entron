@@ -835,7 +835,7 @@ export class Parser {
    * the resulting program must consist of exactly one expression statement.
    */
   private parseEmbeddedExpression(sourceText: string, pos: Position): Expression {
-    const lexer = new Lexer(sourceText);
+    const lexer = new Lexer(sourceText, false);
     const tokens = lexer.tokenize();
     const subParser = new Parser(tokens);
     const program = subParser.parse();

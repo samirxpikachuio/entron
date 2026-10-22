@@ -2,10 +2,11 @@
   "name": "entron-language",
   "displayName": "Entron — The Modern Plain-English Language",
   "description": "Rich syntax highlighting, file icons, and language configuration for the Entron plain-English programming language.",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "publisher": "entron-team",
   "icon": "assets/entron-icon.png",
   "main": "./extension.js",
+  "activationEvents": ["*"],
   "engines": {
     "vscode": "^1.75.0"
   },
