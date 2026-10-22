@@ -27,7 +27,11 @@ export type Statement =
   | StartGraphqlServerStmt
   | StartMqttServerStmt
   | SendSocketMessageStmt
-  | PublishMqttStmt;
+  | PublishMqttStmt
+  | SwitchStmt
+  | ClassDefStmt
+  | ImportStmt
+  | ExportStmt;
 
 export interface Position {
   line: number;
@@ -48,6 +52,9 @@ export interface AssignmentStmt extends BaseNode {
   kind: "AssignmentStmt";
   name: string;
   value: Expression;
+  /** Set when assigning to a member, e.g. `set person.name to "Ada"`. */
+  target?: Expression;
+  member?: string;
 }
 
 export interface ChangeVariableStmt extends BaseNode {
@@ -223,6 +230,56 @@ export interface PublishMqttStmt extends BaseNode {
   payloadExpr: Expression;
 }
 
+export interface SwitchCase {
+  /** `undefined` means the default / otherwise branch. */
+  test?: Expression;
+  body: Statement[];
+}
+
+export interface SwitchStmt extends BaseNode {
+  kind: "SwitchStmt";
+  discriminant: Expression;
+  cases: SwitchCase[];
+}
+
+export interface ClassField {
+  name: string;
+  /** Optional default value expression. */
+  defaultValue?: Expression;
+}
+
+export interface ClassDefStmt extends BaseNode {
+  kind: "ClassDefStmt";
+  name: string;
+  parentClass?: string;
+  fields: ClassField[];
+  methods: ClassMethod[];
+}
+
+export interface ClassMethod {
+  name: string;
+  params: string[];
+  body: Statement[];
+}
+
+export interface ImportStmt extends BaseNode {
+  kind: "ImportStmt";
+  /** Module path or module name. */
+  module: string;
+  /** Optional alias to bind the module under a different name. */
+  alias?: string;
+  /** When true the whole module namespace is imported. */
+  isNamespace: boolean;
+  /** Named members to pull in, when not a namespace import. */
+  names: string[];
+}
+
+export interface ExportStmt extends BaseNode {
+  kind: "ExportStmt";
+  /** Exported names; empty means "export everything". */
+  names: string[];
+}
+
 // Expressions
 export type Expression =
   | NumberLiteral
@@ -244,11 +301,69 @@ export type Expression =
   | RandomBetweenExpr
   | FileExistsExpr
   | CurrentTimestampExpr
-  | ParseJsonExpr;
+  | ParseJsonExpr
+  | InterpolatedStringExpr
+  | LambdaExpr
+  | ListComprehensionExpr
+  | MemberAccessExpr
+  | MethodCallExpr
+  | NewInstanceExpr
+  | ThisExpr;
 
 export interface ParseJsonExpr extends BaseNode {
   kind: "ParseJsonExpr";
   jsonExpr: Expression;
+}
+
+/** A string literal containing `{{ expression }}` placeholders. */
+export interface InterpolatedStringExpr extends BaseNode {
+  kind: "InterpolatedStringExpr";
+  /** Literal chunks and embedded expressions, in source order. */
+  parts: (string | Expression)[];
+}
+
+export interface LambdaExpr extends BaseNode {
+  kind: "LambdaExpr";
+  params: string[];
+  body: Statement[];
+}
+
+export interface ListComprehensionExpr extends BaseNode {
+  kind: "ListComprehensionExpr";
+  /** The list being mapped over. */
+  source: Expression;
+  /** Name bound to each element. */
+  itemVar: string;
+  /** Optional second binding over record entries. */
+  keyVar?: string;
+  /** The value produced for each element. */
+  value: Expression;
+  /** Optional filter expression. */
+  condition?: Expression;
+}
+
+export interface MemberAccessExpr extends BaseNode {
+  kind: "MemberAccessExpr";
+  object: Expression;
+  member: string;
+}
+
+/** A call of the form `<object>.<method> with <args>`. */
+export interface MethodCallExpr extends BaseNode {
+  kind: "MethodCallExpr";
+  object: Expression;
+  method: string;
+  args: Expression[];
+}
+
+export interface NewInstanceExpr extends BaseNode {
+  kind: "NewInstanceExpr";
+  className: string;
+  args: Expression[];
+}
+
+export interface ThisExpr extends BaseNode {
+  kind: "ThisExpr";
 }
 
 export interface NumberLiteral extends BaseNode {

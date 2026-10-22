@@ -99,6 +99,21 @@ const KEYWORDS: Record<string, TokenType> = {
   remove: TokenType.REMOVE,
   get: TokenType.GET,
   value: TokenType.VALUE,
+  switch: TokenType.SWITCH,
+  case: TokenType.CASE,
+  collect: TokenType.COLLECT,
+  where: TokenType.WHERE,
+  lambda: TokenType.LAMBDA,
+  returning: TokenType.RETURNING,
+  class: TokenType.CLASS,
+  extends: TokenType.EXTENDS,
+  new: TokenType.NEW,
+  this: TokenType.THIS,
+  field: TokenType.FIELD,
+  method: TokenType.METHOD,
+  module: TokenType.MODULE,
+  import: TokenType.IMPORT,
+  export: TokenType.EXPORT,
   true: TokenType.TRUE,
   yes: TokenType.YES,
   false: TokenType.FALSE,
@@ -206,6 +221,11 @@ export class Lexer {
         this.advance();
         continue;
       }
+      if (char === ".") {
+        tokens.push(this.makeToken(TokenType.DOT, "."));
+        this.advance();
+        continue;
+      }
 
       // Numbers
       if (this.isDigit(char)) {
@@ -289,17 +309,41 @@ export class Lexer {
     const startLine = this.line;
     this.advance(); // consume opening quote
     let strVal = "";
+    let hasInterpolation = false;
 
     while (this.pos < this.source.length) {
       const char = this.source[this.pos];
       if (char === quote) {
         this.advance(); // consume closing quote
         return {
-          type: TokenType.STRING,
+          type: hasInterpolation ? TokenType.INTERPOLATED_STRING : TokenType.STRING,
           value: strVal,
           line: startLine,
           column: startCol
         };
+      }
+      if (char === "{" && this.source[this.pos + 1] === "{") {
+        // Interpolation placeholder: {{ expression }}
+        hasInterpolation = true;
+        strVal += "{{";
+        this.advance();
+        this.advance();
+        while (this.pos < this.source.length) {
+          const inner = this.source[this.pos];
+          if (inner === "}" && this.source[this.pos + 1] === "}") {
+            strVal += "}}";
+            this.advance();
+            this.advance();
+            break;
+          }
+          if (inner === "\n") {
+            this.line++;
+            this.column = 0;
+          }
+          strVal += inner;
+          this.advance();
+        }
+        continue;
       }
       if (char === "\\") {
         this.advance();

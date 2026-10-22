@@ -2,6 +2,7 @@ export enum TokenType {
   // Literals
   NUMBER = "NUMBER",
   STRING = "STRING",
+  INTERPOLATED_STRING = "INTERPOLATED_STRING",
   IDENTIFIER = "IDENTIFIER",
 
   // Keywords
@@ -101,6 +102,32 @@ export enum TokenType {
   REMOVE = "REMOVE",
   GET = "GET",
   VALUE = "VALUE",
+
+  // Lambdas
+  LAMBDA = "LAMBDA",
+  RETURNING = "RETURNING",
+
+  // Switch
+  SWITCH = "SWITCH",
+  CASE = "CASE",
+
+  // Comprehensions
+  COLLECT = "COLLECT",
+  WHERE = "WHERE",
+
+  // Object oriented
+  CLASS = "CLASS",
+  EXTENDS = "EXTENDS",
+  NEW = "NEW",
+  THIS = "THIS",
+  DOT = "DOT",
+  FIELD = "FIELD",
+  METHOD = "METHOD",
+
+  // Modules
+  MODULE = "MODULE",
+  IMPORT = "IMPORT",
+  EXPORT = "EXPORT",
 
   // Values
   TRUE = "TRUE",

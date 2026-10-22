@@ -33,10 +33,25 @@ import {
   StartMqttServerStmt,
   SendSocketMessageStmt,
   PublishMqttStmt,
+  SwitchStmt,
+  SwitchCase,
+  ClassDefStmt,
+  ClassField,
+  ClassMethod,
+  ImportStmt,
+  ExportStmt,
+  InterpolatedStringExpr,
+  LambdaExpr,
+  ListComprehensionExpr,
+  MemberAccessExpr,
+  MethodCallExpr,
+  NewInstanceExpr,
+  ThisExpr,
   Position,
   BinaryOperator,
   UnaryOperator
 } from "./ast";
+import { Lexer } from "../lexer/lexer";
 
 export class Parser {
   private tokens: Token[];
@@ -78,6 +93,9 @@ export class Parser {
       }
       if (this.match(TokenType.VARIABLE)) {
         return this.parseVariableDeclaration();
+      }
+      if (this.match(TokenType.CLASS)) {
+        return this.parseClassDef();
       }
       // If "create <name> as <expr>"
       return this.parseVariableDeclaration();
@@ -212,6 +230,26 @@ export class Parser {
     // publish mqtt topic <topic> with payload <payload>
     if (this.match(TokenType.PUBLISH)) {
       return this.parsePublishMqtt();
+    }
+
+    // switch <expr> ... case ... otherwise ... end switch
+    if (this.match(TokenType.SWITCH)) {
+      return this.parseSwitch();
+    }
+
+    // define class <Name> ... end class
+    if (this.match(TokenType.CLASS)) {
+      return this.parseClassDef();
+    }
+
+    // import <module>
+    if (this.match(TokenType.IMPORT)) {
+      return this.parseImport();
+    }
+
+    // export ...
+    if (this.match(TokenType.EXPORT)) {
+      return this.parseExport();
     }
 
     // Fallback: expression statement
@@ -744,6 +782,169 @@ export class Parser {
       pos
     };
   }
+
+  private parseSwitch(): SwitchStmt {
+    const pos = this.pos();
+    const discriminant = this.parseExpression();
+    this.skipNewlines();
+
+    const cases: SwitchCase[] = [];
+
+    while (this.match(TokenType.CASE)) {
+      const test = this.parseExpression();
+      this.skipNewlines();
+      const body = this.parseBlock([TokenType.CASE, TokenType.OTHERWISE, TokenType.END]);
+      cases.push({ test, body });
+      this.skipNewlines();
+    }
+
+    // Optional default branch
+    if (this.match(TokenType.OTHERWISE)) {
+      this.skipNewlines();
+      const body = this.parseBlock([TokenType.END]);
+      cases.push({ body });
+      this.skipNewlines();
+    }
+
+    this.consume(TokenType.END, "Expected 'end switch' to close switch statement.");
+    this.match(TokenType.SWITCH);
+
+    return {
+      kind: "SwitchStmt",
+      discriminant,
+      cases,
+      pos
+    };
+  }
+
+  private parseClassDef(): ClassDefStmt {
+    const pos = this.pos();
+    const nameToken = this.consume(TokenType.IDENTIFIER, "Expected class name after 'define class'.");
+
+    let parentClass: string | undefined = undefined;
+    if (this.match(TokenType.EXTENDS)) {
+      const parentToken = this.consume(
+        TokenType.IDENTIFIER,
+        "Expected parent class name after 'extends'."
+      );
+      parentClass = parentToken.value;
+    }
+
+    this.skipNewlines();
+
+    const fields: ClassField[] = [];
+    const methods: ClassMethod[] = [];
+
+    while (!this.isAtEnd()) {
+      this.skipNewlines();
+      if (this.check(TokenType.END)) break;
+
+      // field <name> [as <default>]
+      if (this.match(TokenType.FIELD)) {
+        const fieldToken = this.consume(TokenType.IDENTIFIER, "Expected field name after 'field'.");
+        let defaultValue: Expression | undefined = undefined;
+        if (this.match(TokenType.AS)) {
+          defaultValue = this.parseExpression();
+        }
+        fields.push({ name: fieldToken.value, defaultValue });
+        this.skipNewlines();
+        continue;
+      }
+
+      // method <name> with <params> ... end method
+      if (this.match(TokenType.METHOD)) {
+        const methodToken = this.consume(TokenType.IDENTIFIER, "Expected method name after 'method'.");
+        const params: string[] = [];
+        if (this.match(TokenType.WITH)) {
+          do {
+            const paramToken = this.consume(
+              TokenType.IDENTIFIER,
+              "Expected parameter name in method definition."
+            );
+            params.push(paramToken.value);
+          } while (this.match(TokenType.AND));
+        }
+        this.skipNewlines();
+        const body = this.parseBlock([TokenType.END]);
+        this.consume(TokenType.END, "Expected 'end method' to close method definition.");
+        this.match(TokenType.METHOD);
+        methods.push({ name: methodToken.value, params, body });
+        this.skipNewlines();
+        continue;
+      }
+
+      throw new Error(
+        `Syntax Error at line ${this.peek().line}, column ${this.peek().column}: Expected 'field' or 'method' inside class definition.`
+      );
+    }
+
+    this.consume(TokenType.END, "Expected 'end class' to close class definition.");
+    this.match(TokenType.CLASS);
+
+    return {
+      kind: "ClassDefStmt",
+      name: nameToken.value,
+      parentClass,
+      fields,
+      methods,
+      pos
+    };
+  }
+
+  private parseImport(): ImportStmt {
+    const pos = this.pos();
+
+    // import <module> as <alias>
+    // import <module> with <name> and <name>
+    // import <module>
+    const moduleToken = this.consume(TokenType.IDENTIFIER, "Expected module name after 'import'.");
+    const module = moduleToken.value;
+
+    let alias: string | undefined = undefined;
+    let isNamespace = false;
+    const names: string[] = [];
+
+    if (this.match(TokenType.AS)) {
+      const aliasToken = this.consume(TokenType.IDENTIFIER, "Expected alias name after 'as'.");
+      alias = aliasToken.value;
+      isNamespace = true;
+    } else if (this.match(TokenType.WITH)) {
+      do {
+        const nameToken = this.consume(TokenType.IDENTIFIER, "Expected member name in import list.");
+        names.push(nameToken.value);
+      } while (this.match(TokenType.AND));
+    }
+
+    return {
+      kind: "ImportStmt",
+      module,
+      alias,
+      isNamespace,
+      names,
+      pos
+    };
+  }
+
+  private parseExport(): ExportStmt {
+    const pos = this.pos();
+    const names: string[] = [];
+
+    // export <name> and <name>  /  export everything
+    while (!this.isAtEndOfStatement()) {
+      const token = this.peek();
+      if (token.type !== TokenType.IDENTIFIER) break;
+      names.push(token.value);
+      this.advance();
+      if (!this.match(TokenType.AND)) break;
+    }
+
+    return {
+      kind: "ExportStmt",
+      names,
+      pos
+    };
+  }
+
 
   private parseBlock(stopTokens: TokenType[]): Statement[] {
     const statements: Statement[] = [];
