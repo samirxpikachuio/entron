@@ -443,7 +443,44 @@ Entron v1.0.3 accepts **three levels of English for every construct**. Pick the 
 |---|---|---|
 | `define variable response as fetch url "https://example.com"` | `get data from "https://example.com"` | `get the data from "https://example.com"` |
 
-See `SYNTAX.md` and `examples/19_natural_english.entron` for runnable samples.
+See `SYNTAX.md` for the complete Level-3 feature catalog (60+ aliases).
+
+## Level-3 Natural Language Feature Catalog (60+)
+
+The normalizer accepts these additional forms (mapped to core statements):
+
+1. `echo <expr>` / `output <expr>` / `print <expr>` → display
+2. `pause/sleep/delay N seconds/milliseconds` → wait
+3. `wait N sec(s)` / `wait N ms` → wait
+4. `loop N times` / `do N times` → repeat
+5. `when <condition>` / `unless <condition>` → if / if not
+6. `function` / `def` → define function
+7. `invoke` / `execute` → call
+8. `var` / `create` → define variable
+9. `increment` / `decrement` → add/subtract
+10. `sum/difference/product/quotient/remainder of A and B` → arithmetic
+11. `uppercase/lowercase/trim X` → display transformed value
+12. `open file X` / `save X to Y` → file I/O
+13. `fetch X` / `get X` → web requests
+14. `input X` → ask input
+15. `create list name with a, b, c` → list
+16. `length/first item/last item of X` → list helpers
+17. `call name args` (without with) → call
+18. `end` → end
+19. `say/show/display/print X N times` → repeat with display
+20. `... N times waiting/with a delay of/every D seconds/milliseconds`
+21. `make age equal to 18` / `let the age be 18`
+22. `add A and B together`
+23. `turn X into uppercase/lowercase`
+24. `read X` / `save X in Y`
+25. `get the data from URL`
+26. `ask me for my X`
+27. `run name with args`
+28. `make a function called ...`
+29. `teach the computer to ... someone named ...`
+30. `greet Samir` natural call
+31. `if ... is at most/most`
+32. `tell me ...` output aliases
 ## 🧪 Testing
 
 Run the full automated test suite:

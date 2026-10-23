@@ -224,4 +224,71 @@ entron repl
 
 ---
 
-Entron v1.0.1 — The Modern Plain-English Programming Language.
+## Level-3 Natural Language Feature Catalog (50+)
+
+The normalizer accepts the following additional Level-3 forms (all map to supported core statements):
+
+1. `echo <expr>` → `display <expr>`
+2. `output <expr>` → `display <expr>`
+3. `print <expr>` → `display <expr>`
+4. `pause N seconds/milliseconds` → `wait N seconds/milliseconds`
+5. `sleep N seconds/milliseconds` → `wait N seconds/milliseconds`
+6. `delay N seconds/milliseconds` → `wait N seconds/milliseconds`
+7. `wait N sec(s)` → `wait N seconds`
+8. `wait N ms` → `wait N milliseconds`
+9. `loop N times` → `repeat N times`
+10. `do N times` → `repeat N times`
+11. `when <condition>` → `if <condition>`
+12. `unless <condition>` → `if not <condition>`
+13. `function name with params` → `define function name with params`
+14. `def name with params` → `define function name with params`
+15. `invoke name with args` → `call name with args`
+16. `execute name with args` → `call name with args`
+17. `var name as value` → `define variable name as value`
+18. `create name as value` → `define variable name as value`
+19. `increment x by n` → `add n to x`
+20. `decrement x by n` → `subtract n from x`
+21. `sum of A and B` → `A plus B`
+22. `difference of A and B` → `A minus B`
+23. `product of A and B` → `A times B`
+24. `quotient of A and B` → `A divided by B`
+25. `remainder of A and B` → `A modulo B`
+26. `uppercase X` → `display uppercase of X`
+27. `lowercase X` → `display lowercase of X`
+28. `trim X` → `display trimmed X`
+29. `open file X` → `read file X into contents`
+30. `save X to Y` → `write X to file Y`
+31. `fetch X` → `fetch url X into response`
+32. `get X` → `get data from X`
+33. `input X` → `ask "Input:" into X`
+34. `create list name with a, b, c` → `define variable name as list containing a and b and c`
+35. `length of X` → `display length of X`
+36. `first item of X` → `display first item of X`
+37. `last item of X` → `display last item of X`
+38. `value for key K in R` normalization
+39. `record with key ...` normalization
+40. `call name args` (without `with`) → `call name with args`
+41. `end` → `end`
+42. `say/show/display/print X N times` → repeat with display
+43. `... N times waiting D seconds/milliseconds`
+44. `... N times with a delay of D seconds/milliseconds`
+45. `... N times every D seconds/milliseconds`
+46. `say/show/display/print` output synonyms
+47. `make age equal to 18` variable assignment
+48. `let the age be 18` variable assignment
+49. `add A and B together` math
+50. `turn X into uppercase/lowercase` strings
+51. `read X` file shorthand
+52. `save X in Y` file shorthand
+53. `get the data from URL` web request
+54. `ask me for my X` input shorthand
+55. `run name with args` function call
+56. `make a function called ...` function definition
+57. `teach the computer to ... someone named ...` function definition
+58. `greet Samir` natural function call
+59. `if ... is at most/most` condition aliases
+60. `tell me ...` output aliases
+
+---
+
+Entron v1.0.6 — The Modern Plain-English Programming Language.

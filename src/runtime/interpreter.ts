@@ -23,9 +23,11 @@ import {
   FunctionValue
 } from "./values";
 import { Environment } from "./environment";
+import { registerBuiltins } from "./builtins";
 import * as fs from "node:fs";
 import * as readline from "node:readline";
 import * as net from "node:net";
+import { Hono } from "hono";
 
 class ReturnSignal {
   constructor(public value: RuntimeValue) {}
@@ -41,6 +43,7 @@ export class Interpreter {
 
   constructor(globalEnv?: Environment) {
     this.globalEnv = globalEnv ?? Environment.createGlobal();
+    registerBuiltins(this.globalEnv);
   }
 
   public async run(program: Program): Promise<RuntimeValue> {
@@ -407,42 +410,50 @@ export class Interpreter {
         const port = Math.floor(portVal.value);
         const self = this;
 
+        const app = new Hono();
+        app.all("*", async (c) => {
+          const url = new URL(c.req.url);
+          const bodyText = await c.req.text();
+          const reqMap = new Map<string, RuntimeValue>();
+          reqMap.set("path", MK_STRING(url.pathname));
+          reqMap.set("method", MK_STRING(c.req.method));
+          reqMap.set("query", MK_STRING(url.search));
+          reqMap.set("body", MK_STRING(bodyText));
+
+          // headers record
+          const headersMap = new Map<string, RuntimeValue>();
+          c.req.raw.headers.forEach((v, k) => headersMap.set(k, MK_STRING(v)));
+          reqMap.set("headers", MK_RECORD(headersMap));
+
+          const reqVal = MK_RECORD(reqMap);
+          try {
+            const resVal = await self.callFunctionByName(stmt.handlerName, [reqVal], env);
+            if (resVal.type === "record") {
+              const statusVal = resVal.value.get("status");
+              const bodyVal = resVal.value.get("body");
+              const typeVal = resVal.value.get("type");
+
+              const status = statusVal && statusVal.type === "number" ? statusVal.value : 200;
+              const contentType = typeVal ? formatValue(typeVal) : "text/plain; charset=utf-8";
+              const bodyStr = bodyVal ? formatValue(bodyVal) : "";
+
+              return new Response(bodyStr, {
+                status,
+                headers: { "Content-Type": contentType }
+              });
+            }
+            return new Response(formatValue(resVal), {
+              status: 200,
+              headers: { "Content-Type": "text/plain; charset=utf-8" }
+            });
+          } catch (err: any) {
+            return new Response(`500 Internal Server Error: ${err?.message ?? err}`, { status: 500 });
+          }
+        });
+
         const server = Bun.serve({
           port,
-          async fetch(req) {
-            const url = new URL(req.url);
-            const bodyText = await req.text();
-            const reqMap = new Map<string, RuntimeValue>();
-            reqMap.set("path", MK_STRING(url.pathname));
-            reqMap.set("method", MK_STRING(req.method));
-            reqMap.set("query", MK_STRING(url.search));
-            reqMap.set("body", MK_STRING(bodyText));
-
-            const reqVal = MK_RECORD(reqMap);
-            try {
-              const resVal = await self.callFunctionByName(stmt.handlerName, [reqVal], env);
-              if (resVal.type === "record") {
-                const statusVal = resVal.value.get("status");
-                const bodyVal = resVal.value.get("body");
-                const typeVal = resVal.value.get("type");
-
-                const status = statusVal && statusVal.type === "number" ? statusVal.value : 200;
-                const contentType = typeVal ? formatValue(typeVal) : "text/plain; charset=utf-8";
-                const bodyStr = bodyVal ? formatValue(bodyVal) : "";
-
-                return new Response(bodyStr, {
-                  status,
-                  headers: { "Content-Type": contentType }
-                });
-              }
-              return new Response(formatValue(resVal), {
-                status: 200,
-                headers: { "Content-Type": "text/plain; charset=utf-8" }
-              });
-            } catch (err: any) {
-              return new Response(`500 Internal Server Error: ${err?.message ?? err}`, { status: 500 });
-            }
-          }
+          fetch: app.fetch,
         });
 
         console.log(`⚡ [Entron HTTP Server] Running at http://localhost:${server.port}`);

@@ -1,0 +1,22 @@
+note: REST API Server Example (powered by Hono)
+note: Demonstrates routing, headers, and JSON responses
+
+define function handleApi with request
+  define variable path as value for key "path" in request
+  define variable method as value for key "method" in request
+  define variable headers as value for key "headers" in request
+
+  if path is equal to "/hello" then
+    return record with key "status" as 200 and key "body" as "Hello from Entron REST API" and key "type" as "text/plain"
+  end if
+
+  if path is equal to "/json" then
+    define variable payload as record with key "message" as "ok" and key "method" as method
+    return record with key "status" as 200 and key "body" as stringify json payload and key "type" as "application/json"
+  end if
+
+  return record with key "status" as 404 and key "body" as "Route not found"
+end function
+
+display "Starting REST API server..."
+start http server on port 3000 with handler handleApi

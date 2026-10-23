@@ -1,6 +1,6 @@
 {
   "name": "entron",
-  "version": "1.0.3",
+  "version": "1.0.91",
   "description": "Entron: The modern dynamic programming language written in plain English",
   "main": "src/index.ts",
   "bin": {
@@ -22,5 +22,9 @@
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^26.6.5"
+  },
+  "dependencies": {
+    "axios": "^1.20.0",
+    "hono": "^4.13.13"
   }
 }
